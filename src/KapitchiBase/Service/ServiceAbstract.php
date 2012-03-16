@@ -79,8 +79,13 @@ class ServiceAbstract implements LocatorAware {
                 // silently ignore invalid eventIdentifier types
             }
             $this->setEventManager(new EventManager($identifiers));
+            $this->attachDefaultListeners();
         }
         return $this->events;
+    }
+    
+    protected function attachDefaultListeners() {
+        
     }
     
     //END

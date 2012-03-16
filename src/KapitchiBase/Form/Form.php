@@ -2,19 +2,30 @@
 
 namespace KapitchiBase\Form;
 
-use Zend\Form\Form,
-        Zend\Form\SubForm;
+use Zend\Form\Form as ZendForm,
+        Zend\Form\SubForm,
+        Zend\EventManager\EventCollection;
 
-class Form extends Form {
+class Form extends ZendForm {
     
-    public function getExtsSubForm() {
+    public function getExtsSubForm($name = null) {
         $extsForm = $this->getSubForm('exts');
         if($extsForm === null) {
             $extsForm = new SubForm();
             $this->addSubForm($extsForm, 'exts');
         }
         
+        if($name !== null) {
+            return $extsForm->getSubForm($name);
+        }
+        
         return $extsForm;
+    }
+    
+    public function addExtsSubForm(ZendForm $form, $name) {
+        $extsForm = $this->getExtsSubForm();
+        $form->setIsArray(true);
+        $extsForm->addSubForm($form, $name);
     }
     
     

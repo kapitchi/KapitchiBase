@@ -3,6 +3,7 @@
  * Originally copied from:
  * https://github.com/ZF-Commons/ZfcBase/blob/master/src/ZfcBase/Model/ModelAbstract.php
  * 
+ * This implements RowObjectInterface so it can be used with db table gateways also
  */
 
 namespace KapitchiBase\Model;
@@ -10,7 +11,7 @@ namespace KapitchiBase\Model;
 use Zend\Stdlib\ArrayUtils,
     DateTime;
 
-abstract class ModelAbstract
+abstract class ModelAbstract implements \Zend\Db\ResultSet\RowObjectInterface
 {
     protected $exts = array();
     const ARRAYSET_PRESERVE_KEYS    = 0;
@@ -25,17 +26,10 @@ abstract class ModelAbstract
     public static function fromArray($array)
     {
         if (!ArrayUtils::hasStringKeys($array)) {
-            return false;
-            //throw new \Exception('Error: ZfcBase\Model\ModelAbstract::fromArray expects associative array.');
+            throw new \InvalidArgumentException('KapitchiBase\Model::fromArray expects associative array.');
         }
-        $classMethods = get_class_methods(get_called_class());
         $model = new static();
-        foreach ($array as $key => $value) {
-            $setter = static::fieldToSetterMethod($key);
-            if (is_callable(array($model, $setter))) {
-                $model->$setter($value);
-            }
-        }
+        $model->exchangeArray($array);
         return $model;
     }
 
@@ -70,6 +64,15 @@ abstract class ModelAbstract
         return $this->exts[$extension];
     }
 
+    public function exchangeArray($array) {
+        foreach ($array as $key => $value) {
+            $setter = static::fieldToSetterMethod($key);
+            if (is_callable(array($this, $setter))) {
+                $this->$setter($value);
+            }
+        }
+    }
+    
     /**
      * Convert a model class to an array recursively
      *
@@ -103,7 +106,39 @@ abstract class ModelAbstract
         }
         return $array;
     }
+    
+    public function count() {
+        $vars = get_object_vars($this);
+        unset($vars['exts']);
+        return count($vars);
+    }
+    
+    public function offsetExists($key) {
+        $getter = self::fieldToGetterMethod($key);
+        if(is_callable(array($this, $getter))) {
+            return true;
+        }
+        
+        return false;
+    }
 
+    public function offsetGet($key) {
+        $getter = self::fieldToGetterMethod($key);
+        if(is_callable(array($this, $getter))) {
+            return $this->$getter();
+        }
+        
+        return null;
+    }
+
+    public function offsetSet($key, $value) {
+        throw new \Exception("offsetSet n/i");
+    }
+    
+    public function offsetUnset($key) {
+        throw new \Exception("offsetUnset n/i");
+    }
+    
     public static function fieldToSetterMethod($name)
     {
         return 'set' . static::toCamelCase($name);
