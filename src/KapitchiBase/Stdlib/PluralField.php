@@ -1,0 +1,77 @@
+<?php
+
+namespace KapitchiBase\Stdlib;
+
+use ArrayObject;
+
+class PluralField extends ArrayObject {
+    
+    public static function fromArray(array $data, $instance = null) {
+        $pluralField = new self();
+        
+        foreach($data as $type => $values) {
+            if(!array_key_exists('value', $values)) {
+                throw new \Zend\Console\Exception\RuntimeException('value item is missing');
+            }
+            $value = $values['value'];
+            
+            if(!empty($values['type'])) {
+                $type = $values['type'];
+            }
+            
+            $primary = false;
+            if(!empty($values['primary'])) {
+                $primary = true;
+            }
+            
+            $object = new ArrayObject(array(
+                'type' => $type,
+                'value' => $value,
+                'primary' => $primary,
+            ), ArrayObject::ARRAY_AS_PROPS);
+            
+            $pluralField->append($object);
+        }
+        
+        return $pluralField;
+    }
+    
+    public function toArray() {
+        $array = array();
+        foreach($this as $item) {
+            $value = $item->value;
+            if(is_object($value)) {
+                if(is_callable(array($value, 'toArray'))) {
+                    $value = $value->toArray();
+                }
+            }
+            
+            $array[$item->type] = array(
+                'type' => $item->type,
+                'primary' => $item->primary,
+                'value' => $value,
+            );
+        }
+        
+        return $array;
+    }
+    
+    public function getByType($type) {
+        foreach($this as $item) {
+            if($item->type == $type) {
+                return $item;
+            }
+        }
+    }
+    
+    public function getPrimary() {
+        foreach($this as $item) {
+            if($item->primary) {
+                return $item;
+            }
+        }
+        
+        return null;
+    }
+    
+}
