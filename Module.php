@@ -8,17 +8,6 @@ use Zend\Module\Manager,
 
 class Module implements AutoloaderProvider
 {
-    public function init(Manager $moduleManager)
-    {
-        $events = StaticEventManager::getInstance();
-        $events->attach('di', 'newInstance', function($e) {
-            if($e->getParam('name') == 'zemi-form_test') {
-                $ret = $e->getParam('instance');
-                $ret->addElement('text', 'text');
-            }
-        });
-    }
-    
     public function getAutoloaderConfig()
     {
         return array(
@@ -32,8 +21,6 @@ class Module implements AutoloaderProvider
             ),
         );
     }
-    public function getConfig()
-    {
-        return include __DIR__ . '/config/module.config.php';
-    }
+
+    
 }
