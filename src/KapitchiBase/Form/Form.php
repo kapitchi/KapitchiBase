@@ -8,11 +8,11 @@ use Zend\Form\Form as ZendForm,
 
 class Form extends ZendForm {
     
-    public function getExtsSubForm($name = null) {
-        $extsForm = $this->getSubForm('exts');
+    public function getExtSubForm($name = null) {
+        $extsForm = $this->getSubForm('ext');
         if($extsForm === null) {
             $extsForm = new SubForm();
-            $this->addSubForm($extsForm, 'exts');
+            $this->addSubForm($extsForm, 'ext');
         }
         
         if($name !== null) {
@@ -22,8 +22,8 @@ class Form extends ZendForm {
         return $extsForm;
     }
     
-    public function addExtsSubForm(ZendForm $form, $name) {
-        $extsForm = $this->getExtsSubForm();
+    public function addExtSubForm(ZendForm $form, $name) {
+        $extsForm = $this->getExtSubForm();
         $form->setIsArray(true);
         $extsForm->addSubForm($form, $name);
     }
