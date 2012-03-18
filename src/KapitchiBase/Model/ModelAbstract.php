@@ -13,7 +13,7 @@ use Zend\Stdlib\ArrayUtils,
 
 abstract class ModelAbstract implements \Zend\Db\ResultSet\RowObjectInterface
 {
-    protected $exts = array();
+    protected $ext = array();
     const ARRAYSET_PRESERVE_KEYS    = 0;
     const ARRAYSET_RESET_KEYS       = 1;
 
@@ -56,12 +56,12 @@ abstract class ModelAbstract implements \Zend\Db\ResultSet\RowObjectInterface
     public function ext($extension, $value = null)
     {
         if (null !== $value) {
-            $this->exts[$extension] = $value;
+            $this->ext[$extension] = $value;
         }
-        if (!isset($this->exts[$extension])) {
+        if (!isset($this->ext[$extension])) {
             return null;
         }
-        return $this->exts[$extension];
+        return $this->ext[$extension];
     }
 
     public function exchangeArray($array) {
@@ -109,7 +109,7 @@ abstract class ModelAbstract implements \Zend\Db\ResultSet\RowObjectInterface
     
     public function count() {
         $vars = get_object_vars($this);
-        unset($vars['exts']);
+        unset($vars['ext']);
         return count($vars);
     }
     
