@@ -8,6 +8,7 @@ use     Zend\Loader\LocatorAware,
         Zend\EventManager\EventManager,
         Zend\Paginator\Paginator,
         KapitchiBase\Model\ModelAbstract,
+        KapitchiBase\Mapper\ModelMapper,
         InvalidArgumentException as NoModelFoundException;
 
 
@@ -80,14 +81,28 @@ class ModelServiceAbstract extends ServiceAbstract {
         return $paginator;
     }
     
-    public function update(array $params) {
-        //TODO
-        throw new \Exception("N/I");
-    }
-    
-    public function delete(array $params) {
-        //TODO
-        throw new \Exception("N/I");
+    public function remove($id) {
+        $mapper = $this->getMapper();
+        
+        $model = $mapper->findByPriKey($id);
+        if(!$model) {
+            throw new NoModelFoundException("Model does not exist #$id");
+        }
+        
+        $mapper->beginTransaction();
+        $params = $this->triggerParamsMergeEvent('remove.pre', array(
+            //'id' => $id,
+            'model' => $model
+        ));
+        
+        $ret = $mapper->remove($model);
+        $params['model'] = $model;
+        
+        $params = $this->triggerParamsMergeEvent('remove.post', $params);
+        
+        $mapper->commit();
+        
+        return $params;
     }
     
     protected function attachDefaultListeners() {
@@ -96,14 +111,13 @@ class ModelServiceAbstract extends ServiceAbstract {
         $events = $this->events();
         $mapper = $this->getMapper();
         
-        //load by id
+        //load by pri key
         $events->attach('get.load', function($e) use ($mapper){
-            $id = $e->getParam('id');
-            if(!$id) {
+            $priKey = $e->getParam('priKey');
+            if(!$priKey) {
                 return;
             }
-            //TODO findById interface!!!
-            return $mapper->findById($id);
+            return $mapper->findByPriKey($priKey);
         });
     }
     
@@ -121,7 +135,7 @@ class ModelServiceAbstract extends ServiceAbstract {
         $this->modelPrototype = $modelPrototype;
     }
 
-    public function setMapper($mapper) {
+    public function setMapper(ModelMapper $mapper) {
         $this->mapper = $mapper;
     }
     
