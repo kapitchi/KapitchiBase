@@ -27,9 +27,13 @@ class ModelServiceAbstract extends ServiceAbstract {
         //TODO how to ACL protect this point???
         //  resoure ................. permission.... roles
         //'KapitchiIdentity\Service', 'persist.pre', array('admin'), 
-        $params = $this->triggerParamsMergeEvent('persist.pre', array('data' => $data));
+        $model = $this->createModelFromArray($data);
         
-        $model = $this->createModelFromArray($params['data']);
+        $params = $this->triggerParamsMergeEvent('persist.pre', array(
+            'data' => $data,
+            'model' => $model,
+        ));
+        
         $ret = $mapper->persist($model);
         $params['model'] = $model;
         
