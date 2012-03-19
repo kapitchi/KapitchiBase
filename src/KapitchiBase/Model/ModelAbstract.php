@@ -132,7 +132,12 @@ abstract class ModelAbstract implements \Zend\Db\ResultSet\RowObjectInterface
     }
 
     public function offsetSet($key, $value) {
-        throw new \Exception("offsetSet n/i");
+        $setter = static::fieldToSetterMethod($key);
+        if(!is_callable(array($this, $setter))) {
+            throw new \Exception("offsetSet: $setter() does not exist");
+        }
+        
+        return $this->$setter($value);
     }
     
     public function offsetUnset($key) {

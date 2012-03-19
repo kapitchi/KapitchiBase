@@ -8,10 +8,14 @@ class PluralField extends ArrayObject {
     
     public static function fromArray(array $data, $instance = null) {
         $pluralField = new self();
-        
+        $pluralField->exchangeArray($data);
+        return $pluralField;
+    }
+    
+    public function exchangeArray($data) {
         foreach($data as $type => $values) {
             if(!array_key_exists('value', $values)) {
-                throw new \Zend\Console\Exception\RuntimeException('value item is missing');
+                throw new \RuntimeException('value item is missing');
             }
             $value = $values['value'];
             
@@ -30,10 +34,8 @@ class PluralField extends ArrayObject {
                 'primary' => $primary,
             ), ArrayObject::ARRAY_AS_PROPS);
             
-            $pluralField->append($object);
+            $this->append($object);
         }
-        
-        return $pluralField;
     }
     
     public function toArray() {
