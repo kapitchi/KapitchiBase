@@ -26,8 +26,8 @@ class ServiceAbstract implements LocatorAware {
         return $params;
     }
     
-    protected function triggerEvent($event, $params) {
-        return $this->events()->trigger($event, $this, $params);
+    protected function triggerEvent($event, $params, $callback = null) {
+        return $this->events()->trigger($event, $this, $params, $callback);
     }
     
     public function setLocator(Locator $locator) {
