@@ -3,16 +3,24 @@
 namespace KapitchiBase\Form;
 
 use Zend\Form\Form as ZendForm,
-        Zend\Form\SubForm,
-        Zend\EventManager\EventCollection;
+    Zend\Form\SubForm,
+    Zend\EventManager\EventCollection,
+    Zend\EventManager\EventManager;
 
 class Form extends ZendForm {
     
+    public function __construct($options = null)
+    {
+        parent::__construct($options);
+        
+        $this->events()->trigger('construct.post', $this);
+    }
+    
     public function getExtSubForm($name = null) {
-        $extsForm = $this->getSubForm('ext');
+        $extsForm = $this->getSubForm('exts');
         if($extsForm === null) {
             $extsForm = new SubForm();
-            $this->addSubForm($extsForm, 'ext');
+            $this->addSubForm($extsForm, 'exts');
         }
         
         if($name !== null) {

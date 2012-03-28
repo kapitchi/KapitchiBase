@@ -8,7 +8,8 @@ use Zend\Module\Manager,
     Zend\Module\Consumer\AutoloaderProvider,
     Zend\Module\Consumer\LocatorRegistered,
     KapitchiIdentity\Form\Identity as IdentityForm,
-    Zend\EventManager\EventDescription as Event;
+    Zend\EventManager\EventDescription as Event,
+    KapitchiBase\Plugin\BootstrapPlugin;
 
 abstract class ModuleAbstract implements AutoloaderProvider, LocatorRegistered
 {
@@ -23,6 +24,20 @@ abstract class ModuleAbstract implements AutoloaderProvider, LocatorRegistered
             $app = $e->getParam('application');
             $instance->bootstrap($moduleManager, $app);
         });
+        
+        //register plugins
+        $plugins = $this->getOption('plugins', array());
+        foreach($plugins as $pluginName => $options) {
+            if(!$options || !is_array($options)) {
+                continue;
+            }
+            
+            $pluginClass = $options['class'];
+            $plugin = new  $pluginClass($pluginName, $this, $moduleManager);
+            if($plugin instanceof BootstrapPlugin) {
+                $events->attach('bootstrap', 'bootstrap', array($plugin, 'onBootstrap'));
+            }
+        }
     }
     
     public function bootstrap(Manager $moduleManager, Application $app) {
