@@ -5,7 +5,8 @@ namespace KapitchiBase\Plugin;
 use Zend\Module\Manager,
     Zend\EventManager\StaticEventManager,
     Zend\Mvc\AppContext as Application,
-    ZfcBase\Model\ModelAbstract;
+    ZfcBase\Model\ModelAbstract,
+    KapitchiBase\Form\Form;
 
 abstract class ModelPlugin extends PluginAbstract {
     protected $modelServiceClass;
@@ -26,15 +27,19 @@ abstract class ModelPlugin extends PluginAbstract {
         $events->attach($this->getModelServiceClass(), 'remove.post', array($this, 'onModelRemovePost'));
         $events->attach($this->getModelServiceClass(), array('get.ext.' . $this->getExtName(), 'get.exts'), array($this, 'onGetModel'));
         if($this->getModelFormClass()) {
-            $events->attach($this->getModelFormClass(), 'constuct.post', array($this, 'onCreateForm'));
+            $events->attach($this->getModelFormClass(), 'construct.post', array($this, 'onCreateForm'));
+        }
+    }
+    
+    protected function createForm(Form $form) {
+        $extForm = $this->getForm();
+        if($extForm) {
+            $form->addExtSubForm($extForm, $this->getExtName());
         }
     }
     
     public function onCreateForm($e) {
-        $extForm = $this->getForm();
-        if($extForm) {
-            $e->getTarget()->addExtSubForm($extForm, $this->getExtName());
-        }
+        $this->createForm($e->getTarget());
     }
     
     public function onModelPersistPost($e) {

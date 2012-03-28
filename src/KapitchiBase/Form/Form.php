@@ -33,6 +33,7 @@ class Form extends ZendForm {
     public function addExtSubForm(ZendForm $form, $name) {
         $extsForm = $this->getExtSubForm();
         $form->setIsArray(true);
+        $form->removeDecorator('FormDecorator');
         $extsForm->addSubForm($form, $name);
     }
     

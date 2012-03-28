@@ -1,7 +1,7 @@
 <?php
 namespace KapitchiBase\Mapper;
 
-use KapitchiBase\Model\ModelAbstract;
+use ZfcBase\Model\ModelAbstract;
 
 interface ModelMapper {
     public function findByPriKey($key);
