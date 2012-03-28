@@ -7,7 +7,7 @@ use     Zend\Loader\LocatorAware,
         Zend\EventManager\EventCollection,
         Zend\EventManager\EventManager,
         Zend\Paginator\Paginator,
-        KapitchiBase\Model\ModelAbstract,
+        ZfcBase\Model\ModelAbstract,
         KapitchiBase\Mapper\ModelMapper,
         InvalidArgumentException as NoModelFoundException;
 
@@ -22,11 +22,10 @@ class ModelServiceAbstract extends ServiceAbstract {
      */
     public function persist(array $data) {
         $mapper = $this->getMapper();
-        $mapper->beginTransaction();
+        if($mapper instanceof Transactional) {
+            $mapper->beginTransaction();
+        }
         
-        //TODO how to ACL protect this point???
-        //  resoure ................. permission.... roles
-        //'KapitchiIdentity\Service', 'persist.pre', array('admin'), 
         $model = $this->createModelFromArray($data);
         
         $params = $this->triggerParamsMergeEvent('persist.pre', array(
@@ -45,9 +44,6 @@ class ModelServiceAbstract extends ServiceAbstract {
     }
     
     public function get(array $filter, $exts = array()) {
-//        if(!is_array($filter)) {
-//            $filter = array('id' => $filter);
-//        }
         
         $model = $this->getModelPrototype();
         $modelClass = get_class($model);

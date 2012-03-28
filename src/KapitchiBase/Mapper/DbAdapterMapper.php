@@ -43,6 +43,10 @@ abstract class DbAdapterMapper implements Transactional, AdapterAwareInterface {
         
     }
     
+    public function rollback($write = true) {
+        
+    }
+    
     public function setDbAdapter(Adapter $adapter) {
         $this->setReadAdapter($adapter);
         $this->setWriteAdapter($adapter);
