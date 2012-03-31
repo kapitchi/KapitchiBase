@@ -2,8 +2,9 @@
 
 namespace KapitchiBase\Mapper;
 
-use     Zend\Stdlib\ArrayUtils,
-        KapitchiBase\Stdlib\PluralField;
+use Zend\Stdlib\ArrayUtils,
+    ZfcBase\Mapper\DbAdapterMapper,
+    KapitchiBase\Stdlib\PluralField;
 
 /**
  * TODO this has to be finished!!!!

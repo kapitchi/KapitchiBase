@@ -6,7 +6,7 @@ use Zend\Module\Manager,
     Zend\EventManager\StaticEventManager,
     Zend\Mvc\AppContext as Application,
     ZfcBase\Model\ModelAbstract,
-    KapitchiBase\Form\Form;
+    ZfcBase\Form\Form;
 
 abstract class ModelPlugin extends PluginAbstract {
     protected $modelServiceClass;

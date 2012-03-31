@@ -6,7 +6,7 @@ use ArrayObject;
 
 class PluralField extends ArrayObject {
     
-    public static function fromArray(array $data, $instance = null) {
+    public static function fromArray(array $data) {
         $pluralField = new self();
         $pluralField->exchangeArray($data);
         return $pluralField;
