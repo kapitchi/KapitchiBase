@@ -14,9 +14,12 @@ abstract class ModelPlugin extends PluginAbstract {
     protected $extName;
     
     abstract public function getModel(ModelAbstract $model);
-    abstract public function getForm();
-    abstract public function persistModel(ModelAbstract $model, array $extData, array $data);
+    abstract public function persistModel(ModelAbstract $model, array $data, $extData);
     abstract public function removeModel(ModelAbstract $model);
+    
+    public function getForm() {
+        
+    }
     
     protected function bootstrap(Application $app) {
         $this->setApplication($app);
@@ -45,8 +48,13 @@ abstract class ModelPlugin extends PluginAbstract {
     public function onModelPersistPost($e) {
         $data = $e->getParam('data');
         $model = $e->getParam('model');
-        $extData = $data['exts'][$this->getExtName()];
-        $extModel = $this->persistModel($model, $extData, $data);
+        
+        $extData = null;
+        if(isset($data['exts'][$this->getExtName()])) {
+            $extData = $data['exts'][$this->getExtName()];
+        }
+        
+        $extModel = $this->persistModel($model, $data, $extData);
         if($extModel) {
             $model->ext($this->getExtName(), $extModel);
         }

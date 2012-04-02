@@ -4,12 +4,12 @@ namespace KapitchiBase\Crypt;
 
 use ZfcBase\Util\String;
 
-class Hash extends \ZfcBase\Service\ServiceAbstract {
+class Hash {
     protected $algorithm = 'md5';
     protected $sharedSalt = '';
     protected $cost = 0;
     
-    public function generateHash($str)  {
+    public function encrypt($str)  {
         $algorithm = $this->getAlgorithm();
         $salt = $this->getSalt($algorithm);
         $saltedStr = $this->saltString($str);

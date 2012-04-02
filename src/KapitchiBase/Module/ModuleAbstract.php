@@ -34,9 +34,11 @@ abstract class ModuleAbstract implements AutoloaderProvider, LocatorRegistered
             
             $pluginClass = $options['class'];
             $plugin = new  $pluginClass($pluginName, $this, $moduleManager);
-            if($plugin instanceof BootstrapPlugin) {
-                $events->attach('bootstrap', 'bootstrap', array($plugin, 'onBootstrap'));
+            if(!$plugin instanceof BootstrapPlugin) {
+                throw new NoBootstrapPluginException("Plugin '$pluginName' is not a bootstrap plugin");
             }
+            
+            $events->attach('bootstrap', 'bootstrap', array($plugin, 'onBootstrap'), isset($options['priority']) ? $options['priority'] : 1);
         }
     }
     
