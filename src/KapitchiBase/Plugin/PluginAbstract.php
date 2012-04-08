@@ -26,7 +26,7 @@ abstract class PluginAbstract implements BootstrapPlugin {
     }
     
     public function getOption($option, $default = null) {
-        return $this->getModule()->getOption('plugins.' . $this->getPluginName() . '.options.' . $option, $default);
+        return $this->getModule()->getOption($this->getPluginName() . '.options.' . $option, $default, 'plugins');
     }
     
     //getters/setters

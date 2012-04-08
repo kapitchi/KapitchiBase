@@ -6,11 +6,13 @@ use Zend\Module\Manager,
     Zend\EventManager\StaticEventManager,
     Zend\Mvc\AppContext as Application,
     ZfcBase\Model\ModelAbstract,
-    ZfcBase\Form\Form;
+    ZfcBase\Form\Form,
+    ZfcBase\Service\Exception\ModelNotFoundException;
 
 abstract class ModelPlugin extends PluginAbstract {
     protected $modelServiceClass;
     protected $modelFormClass;
+    protected $priority = 1;
     protected $extName;
     
     abstract public function getModel(ModelAbstract $model);
@@ -26,11 +28,12 @@ abstract class ModelPlugin extends PluginAbstract {
         
         $events = StaticEventManager::getInstance();
         
-        $events->attach($this->getModelServiceClass(), 'persist.post', array($this, 'onModelPersistPost'));
-        $events->attach($this->getModelServiceClass(), 'remove.post', array($this, 'onModelRemovePost'));
-        $events->attach($this->getModelServiceClass(), array('get.ext.' . $this->getExtName(), 'get.exts'), array($this, 'onGetModel'));
+        $events->attach($this->getModelServiceClass(), 'persist.post', array($this, 'onModelPersistPost'), $this->priority);
+        $events->attach($this->getModelServiceClass(), 'remove.post', array($this, 'onModelRemovePost'), $this->priority);
+        $events->attach($this->getModelServiceClass(), 'get.ext.' . $this->getExtName(), array($this, 'onGetExtModel'), $this->priority);
+        $events->attach($this->getModelServiceClass(), 'get.exts', array($this, 'onGetExtsModel'), $this->priority);
         if($this->getModelFormClass()) {
-            $events->attach($this->getModelFormClass(), 'construct.post', array($this, 'onCreateForm'));
+            $events->attach($this->getModelFormClass(), 'construct.post', array($this, 'onCreateForm'), $this->priority);
         }
     }
     
@@ -70,11 +73,19 @@ abstract class ModelPlugin extends PluginAbstract {
         }
     }
     
-    public function onGetModel($e) {
+    public function onGetExtModel($e) {
         $model = $e->getParam('model');
         $extModel = $this->getModel($model);
         if($extModel) {
             $model->ext($this->getExtName(), $extModel);
+        }
+    }
+    
+    public function onGetExtsModel($e) {
+        try {
+            $this->onGetExtModel($e);
+        } catch(ModelNotFoundException $e) {
+            //matuszemi: we want to ignore these exceptions when we load extensions implicitly
         }
     }
     
