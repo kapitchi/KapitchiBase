@@ -27,6 +27,7 @@ abstract class ModuleAbstract extends \ZfcBase\Module\ModuleAbstract {
             if(isset($mergedConfig[$instance->getNamespace()]['plugins'])) {
                 $plugins = $mergedConfig[$instance->getNamespace()]['plugins'];
                 
+                $queue = new \Zend\Stdlib\SplPriorityQueue();
                 foreach($plugins as $pluginName => $options) {
                     
                     //matuszemi: we enable plugins by default but if 'enabled' is set to false we switch them off!
@@ -43,7 +44,11 @@ abstract class ModuleAbstract extends \ZfcBase\Module\ModuleAbstract {
                     if(!$plugin instanceof BootstrapPlugin) {
                         throw new NoBootstrapPluginException("Plugin '$pluginName' is not a bootstrap plugin");
                     }
-
+                    $priority = isset($options['priority']) ? $options['priority'] : 1;
+                    $queue->insert($plugin, $priority);
+                }
+                
+                foreach($queue as $plugin) {
                     $plugin->onBootstrap($e);
                 }
             }
