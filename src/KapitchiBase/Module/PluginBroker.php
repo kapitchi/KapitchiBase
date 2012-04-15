@@ -68,6 +68,10 @@ class PluginBroker extends PluginSpecBroker {
         $this->bootstrapPlugins = $plugins;
     }
     
+    public function isPluginBootstraped($pluginName) {
+        return in_array($pluginName, $this->getBootstrapPlugins());
+    }
+    
     public function getBootstrapPlugins() {
         return $this->bootstrapPlugins;
     }
