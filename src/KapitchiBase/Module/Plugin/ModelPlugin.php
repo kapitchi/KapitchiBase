@@ -29,7 +29,7 @@ abstract class ModelPlugin extends PluginAbstract {
         $events = StaticEventManager::getInstance();
         
         $events->attach($this->getModelServiceClass(), 'persist.post', array($this, 'onModelPersistPost'), $this->priority);
-        $events->attach($this->getModelServiceClass(), 'remove.post', array($this, 'onModelRemovePost'), $this->priority);
+        $events->attach($this->getModelServiceClass(), 'remove.pre', array($this, 'onModelRemovePre'), $this->priority);
         $events->attach($this->getModelServiceClass(), 'get.ext.' . $this->getExtName(), array($this, 'onGetExtModel'), $this->priority);
         $events->attach($this->getModelServiceClass(), 'get.exts', array($this, 'onGetExtsModel'), $this->priority);
         if($this->getModelFormClass()) {
@@ -63,7 +63,7 @@ abstract class ModelPlugin extends PluginAbstract {
         }
     }
     
-    public function onModelRemovePost($e) {
+    public function onModelRemovePre($e) {
         $data = $e->getParam('data');
         $model = $e->getParam('model');
         $extData = $data['exts'][$this->getExtName()];
