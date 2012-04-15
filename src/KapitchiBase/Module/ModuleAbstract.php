@@ -9,10 +9,13 @@ use Zend\Module\Manager,
     Zend\Module\Consumer\LocatorRegistered,
     KapitchiIdentity\Form\Identity as IdentityForm,
     Zend\EventManager\EventDescription as Event,
-    KapitchiBase\Plugin\BootstrapPlugin,
+    KapitchiBase\Module\Plugin\BootstrapPlugin,
+    KapitchiBase\Module\PluginBroker,
     RuntimeException as NoBootstrapPluginException;
 
-abstract class ModuleAbstract extends \ZfcBase\Module\ModuleAbstract {
+abstract class ModuleAbstract extends \ZfcBase\Module\ModuleAbstract implements \Zend\Loader\Pluggable {
+    
+    protected $broker;
     
     public function init(Manager $moduleManager)
     {
@@ -22,39 +25,61 @@ abstract class ModuleAbstract extends \ZfcBase\Module\ModuleAbstract {
             $app = $e->getParam('application');
             $mergedConfig = $e->getParam('config');
             $instance->setMergedConfig($mergedConfig);
-            $instance->bootstrap($moduleManager, $app);
+            
             $locator = $app->getLocator();
-            if(isset($mergedConfig[$instance->getNamespace()]['plugins'])) {
-                $plugins = $mergedConfig[$instance->getNamespace()]['plugins'];
+            
+            $broker = $instance->getBroker();
+            $broker->setLocator($locator);
+            
+            $instance->bootstrap($moduleManager, $app);
+            
+            if(isset($mergedConfig[$instance->getNamespace()]['plugin_broker'])) {
+                $brokerOptions = $mergedConfig[$instance->getNamespace()]['plugin_broker'];
                 
-                $queue = new \Zend\Stdlib\SplPriorityQueue();
-                foreach($plugins as $pluginName => $options) {
-                    
-                    //matuszemi: we enable plugins by default but if 'enabled' is set to false we switch them off!
-                    if(isset($options['enabled']) && $options['enabled'] === false) {
-                        continue;
-                    }
-                    
-                    $plugin = $locator->get($options['diclass'], array(
-                        'pluginName' => $pluginName,
-                        'module' => $instance,
-                        'moduleManager' => $moduleManager
-                    ));
-                    
-                    if(!$plugin instanceof BootstrapPlugin) {
-                        throw new NoBootstrapPluginException("Plugin '$pluginName' is not a bootstrap plugin");
-                    }
-                    $priority = isset($options['priority']) ? $options['priority'] : 1;
-                    $queue->insert($plugin, $priority);
-                }
-                
-                foreach($queue as $plugin) {
-                    $plugin->onBootstrap($e);
-                }
+                $broker->setOptions($brokerOptions->toArray());
+                $broker->bootstrap($app);
             }
             
         });
         
     }
     
+    /**
+     * Get plugin broker instance
+     * 
+     * @return Zend\Loader\Broker
+     */
+    public function getBroker() {
+        if($this->broker === null) {
+            $broker = new PluginBroker($this);
+            $broker->setClassLoader(new \Zend\Loader\PrefixPathLoader(array(
+                $this->getNamespace() . '\Plugin' => $this->getDir() . '/src/' . $this->getNamespace() . '/Plugin'
+            )));
+            
+            $this->broker = $broker;
+        }
+        
+        return $this->broker;
+    }
+
+    /**
+     * Set plugin broker instance
+     * 
+     * @param  string|Broker $broker Plugin broker to load plugins
+     * @return Zend\Loader\Pluggable
+     */
+    public function setBroker($broker) {
+        $this->broker = $broker;
+    }
+
+    /**
+     * Get plugin instance
+     * 
+     * @param  string     $plugin  Name of plugin to return
+     * @param  null|array $options Options to pass to plugin constructor (if not already instantiated)
+     * @return mixed
+     */
+    public function plugin($name, array $options = null) {
+        return $this->getBroker()->load($name, $options);
+    }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace KapitchiBase\Plugin;
+namespace KapitchiBase\Module\Plugin;
 
 use Zend\Module\Manager,
     Zend\EventManager\StaticEventManager,
@@ -23,7 +23,7 @@ abstract class ModelPlugin extends PluginAbstract {
         
     }
     
-    protected function bootstrap(Application $app) {
+    public function bootstrap(Application $app) {
         $this->setApplication($app);
         
         $events = StaticEventManager::getInstance();
