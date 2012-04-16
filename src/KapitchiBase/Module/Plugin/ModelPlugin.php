@@ -64,12 +64,16 @@ abstract class ModelPlugin extends PluginAbstract {
     }
     
     public function onModelRemovePre($e) {
-        $data = $e->getParam('data');
-        $model = $e->getParam('model');
-        $extData = $data['exts'][$this->getExtName()];
-        $extModel = $this->removeModel($model);
-        if($extModel) {
-            $model->ext($this->getExtName(), null);
+        try {
+            $data = $e->getParam('data');
+            $model = $e->getParam('model');
+            $extData = $data['exts'][$this->getExtName()];
+            $extModel = $this->removeModel($model);
+            if($extModel) {
+                $model->ext($this->getExtName(), null);
+            }
+        } catch(ModelNotFoundException $e) {
+            //do we want to ignore ignore these?
         }
     }
     
