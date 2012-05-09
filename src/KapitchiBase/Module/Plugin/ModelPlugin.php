@@ -4,7 +4,7 @@ namespace KapitchiBase\Module\Plugin;
 
 use Zend\Module\Manager,
     Zend\EventManager\StaticEventManager,
-    Zend\Mvc\AppContext as Application,
+    Zend\Mvc\ApplicationInterface,
     ZfcBase\Model\ModelAbstract,
     ZfcBase\Form\Form,
     ZfcBase\Service\Exception\ModelNotFoundException;
@@ -23,7 +23,7 @@ abstract class ModelPlugin extends PluginAbstract {
         
     }
     
-    public function bootstrap(Application $app) {
+    public function bootstrap(ApplicationInterface $app) {
         $this->setApplication($app);
         
         $events = StaticEventManager::getInstance();

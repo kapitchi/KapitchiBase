@@ -2,8 +2,8 @@
 
 namespace KapitchiBase\Module\Plugin;
 
-use Zend\Mvc\AppContext as Application;
+use Zend\Mvc\ApplicationInterface;
 
 interface BootstrapPlugin {
-    public function bootstrap(Application $e);
+    public function bootstrap(ApplicationInterface $app);
 }

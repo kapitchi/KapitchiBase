@@ -3,7 +3,6 @@
 namespace KapitchiBase\Module;
 
 use Zend\Module\Manager,
-    Zend\Mvc\AppContext as Application,
     Zend\EventManager\StaticEventManager,
     Zend\Module\Consumer\AutoloaderProvider,
     Zend\Module\Consumer\LocatorRegistered,
