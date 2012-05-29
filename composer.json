@@ -3,7 +3,7 @@
     "description": "Common set of classes and interfaces used across Kapitchi modules",
     "keywords": [
         "kapitchi",
-        "zf2",
+        "zf2"
     ],
     "homepage": "http://kapitchi.com",
     "authors": [
@@ -20,7 +20,7 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.3.3",
-        "zf-commons/zfc-base": "dev-master",
+        "zf-commons/zfc-base": "dev-master"
     },
     "autoload": {
         "psr-0": {
