@@ -1,0 +1,30 @@
+{
+    "name": "kapitchi/base",
+    "description": "Common set of classes and interfaces used across Kapitchi modules",
+    "keywords": [
+        "kapitchi",
+        "zf2",
+    ],
+    "homepage": "http://kapitchi.com",
+    "authors": [
+        {
+            "name": "Matus Zeman",
+            "email": "mz@kapitchi.com",
+            "homepage": "http://kapitchi.com",
+            "role": "Lead developer"
+        }
+    ],
+    "support": {
+        "email": "dev@kapitchi.com"
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.3",
+        "zendframework/zendframework": "dev-master",
+    },
+    "autoload": {
+        "psr-0": {
+            "KapitchiBase": "src/"
+        }
+    }
+}

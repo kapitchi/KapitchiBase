@@ -2,23 +2,20 @@
 
 namespace KapitchiBase\Module;
 
-use Zend\Module\Manager,
-    Zend\EventManager\StaticEventManager,
-    Zend\Module\Consumer\AutoloaderProvider,
-    Zend\Module\Consumer\LocatorRegistered,
-    KapitchiIdentity\Form\Identity as IdentityForm,
-    Zend\EventManager\EventDescription as Event,
+use Zend\ModuleManager\ModuleManager,
+    Zend\Loader\Pluggable as PluggableInterface,
+    ZfcBase\Module\ModuleAbstract as ZfcModuleAbstract,
     KapitchiBase\Module\Plugin\BootstrapPlugin,
     KapitchiBase\Module\PluginBroker,
     RuntimeException as NoBootstrapPluginException;
 
-abstract class ModuleAbstract extends \ZfcBase\Module\ModuleAbstract implements \Zend\Loader\Pluggable {
+abstract class ModuleAbstract extends ZfcModuleAbstract implements PluggableInterface {
     
     protected $broker;
     
-    public function init(Manager $moduleManager)
+    public function init(ModuleManager $moduleManager)
     {
-        $events = StaticEventManager::getInstance();
+        $events = $moduleManager->events()->getSharedManager();
         $instance = $this;//TODO this will no be needed in PHP 5.4
         $events->attach('bootstrap', 'bootstrap', function($e) use ($instance, $moduleManager) {
             $app = $e->getParam('application');
@@ -31,7 +28,6 @@ abstract class ModuleAbstract extends \ZfcBase\Module\ModuleAbstract implements 
             $broker->setLocator($locator);
             
             $instance->bootstrap($moduleManager, $app);
-            
             if(isset($mergedConfig[$instance->getNamespace()]['plugin_broker'])) {
                 $brokerOptions = $mergedConfig[$instance->getNamespace()]['plugin_broker'];
                 

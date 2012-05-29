@@ -3,7 +3,6 @@
 namespace KapitchiBase\Module\Plugin;
 
 use Zend\Module\Manager,
-    Zend\EventManager\StaticEventManager,
     Zend\Mvc\ApplicationInterface,
     ZfcBase\Model\ModelAbstract,
     ZfcBase\Form\Form,
@@ -26,8 +25,7 @@ abstract class ModelPlugin extends PluginAbstract {
     public function bootstrap(ApplicationInterface $app) {
         $this->setApplication($app);
         
-        $events = StaticEventManager::getInstance();
-        
+        $events = $this->getSharedManager();
         $events->attach($this->getModelServiceClass(), 'persist.post', array($this, 'onModelPersistPost'), $this->priority);
         $events->attach($this->getModelServiceClass(), 'remove.pre', array($this, 'onModelRemovePre'), $this->priority);
         $events->attach($this->getModelServiceClass(), 'get.ext.' . $this->getExtName(), array($this, 'onGetExtModel'), $this->priority);

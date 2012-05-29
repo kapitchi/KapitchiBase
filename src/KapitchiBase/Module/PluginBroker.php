@@ -3,7 +3,7 @@
 namespace KapitchiBase\Module;
 
 use Zend\Loader\PluginSpecBroker,
-    Zend\Mvc\AppContext as Application,
+    Zend\Mvc\ApplicationInterface,
     Zend\Stdlib\ArrayUtils,
     KapitchiBase\Module\Plugin\BootstrapPlugin,
     RuntimeException as InvalidPluginException;
@@ -16,7 +16,7 @@ class PluginBroker extends PluginSpecBroker {
         $this->setModule($module);
     }
     
-    public function bootstrap(Application $app) {
+    public function bootstrap(ApplicationInterface $app) {
         foreach($this->getBootstrapPlugins() as $pluginName) {
             $plugin = $this->load($pluginName);
             if(!$plugin instanceof BootstrapPlugin) {
@@ -24,6 +24,7 @@ class PluginBroker extends PluginSpecBroker {
             }
             $plugin->bootstrap($app);
         }
+            
     }
     
     /**

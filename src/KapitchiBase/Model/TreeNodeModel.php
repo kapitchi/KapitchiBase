@@ -23,7 +23,7 @@ class TreeNodeModel extends ModelAbstract {
     
     public function getParent() {
         if(!$this->parentSet) {
-            throw new UnknownDataException("Parent hasn't been loaded");
+            throw new UnknownDataException("Parent hasn't been set");
         }
         return $this->parent;
     }
@@ -35,8 +35,8 @@ class TreeNodeModel extends ModelAbstract {
     }
 
     public function getChildren() {
-        if (!$this->parentSet) {
-            throw new UnknownDataException("Children haven't been loaded");
+        if (!$this->childrenSet) {
+            throw new UnknownDataException("Children haven't been set");
         }
         return $this->children;
     }
