@@ -3,40 +3,33 @@
 namespace KapitchiBase\Module;
 
 use Zend\ModuleManager\ModuleManager,
+    Zend\ModuleManager\Feature\BootstrapListenerInterface,
+    Zend\EventManager\Event,
     Zend\Loader\Pluggable as PluggableInterface,
     ZfcBase\Module\ModuleAbstract as ZfcModuleAbstract,
     KapitchiBase\Module\Plugin\BootstrapPlugin,
     KapitchiBase\Module\PluginBroker,
     RuntimeException as NoBootstrapPluginException;
 
-abstract class ModuleAbstract extends ZfcModuleAbstract implements PluggableInterface {
+abstract class ModuleAbstract extends ZfcModuleAbstract implements PluggableInterface, BootstrapListenerInterface {
     
     protected $broker;
     
-    public function init(ModuleManager $moduleManager)
-    {
-        $events = $moduleManager->events()->getSharedManager();
-        $instance = $this;//TODO this will no be needed in PHP 5.4
-        $events->attach('bootstrap', 'bootstrap', function($e) use ($instance, $moduleManager) {
-            $app = $e->getParam('application');
-            $mergedConfig = $e->getParam('config');
-            $instance->setMergedConfig($mergedConfig);
-            
-            $locator = $app->getLocator();
-            
-            $broker = $instance->getBroker();
-            $broker->setLocator($locator);
-            
-            $instance->bootstrap($moduleManager, $app);
-            if(isset($mergedConfig[$instance->getNamespace()]['plugin_broker'])) {
-                $brokerOptions = $mergedConfig[$instance->getNamespace()]['plugin_broker'];
-                
-                $broker->setOptions($brokerOptions->toArray());
-                $broker->bootstrap($app);
-            }
-            
-        });
-        
+    public function onBootstrap(Event $e) {
+        $app = $e->getParam('application');
+        $mergedConfig = $e->getParam('config');
+        $this->setMergedConfig($mergedConfig);
+
+        $sm = $app->getServiceManager();
+        $broker = $this->getBroker();
+        $broker->setServiceLocator($sm);
+
+        if(isset($mergedConfig[$this->getNamespace()]['plugin_broker'])) {
+            $brokerOptions = $mergedConfig[$this->getNamespace()]['plugin_broker'];
+
+            $broker->setOptions($brokerOptions->toArray());
+            $broker->onBootstrap($app);
+        }
     }
     
     /**

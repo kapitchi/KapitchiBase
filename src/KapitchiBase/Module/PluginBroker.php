@@ -16,15 +16,11 @@ class PluginBroker extends PluginSpecBroker {
         $this->setModule($module);
     }
     
-    public function bootstrap(ApplicationInterface $app) {
+    public function onBootstrap(Event $e) {
         foreach($this->getBootstrapPlugins() as $pluginName) {
             $plugin = $this->load($pluginName);
-            if(!$plugin instanceof BootstrapPlugin) {
-                throw new InvalidPluginException("Plugin '$pluginName' is not a bootstrap plugin");
-            }
-            $plugin->bootstrap($app);
+            $plugin->onBootstrap($e);
         }
-            
     }
     
     /**
