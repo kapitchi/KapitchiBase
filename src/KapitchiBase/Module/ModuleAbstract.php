@@ -6,7 +6,7 @@ use Zend\ModuleManager\ModuleManager,
     Zend\ModuleManager\Feature\BootstrapListenerInterface,
     Zend\EventManager\Event,
     Zend\Loader\Pluggable as PluggableInterface,
-    ZfcBase\Module\ModuleAbstract as ZfcModuleAbstract,
+    ZfcBase\Module\AbstractModule as ZfcModuleAbstract,
     KapitchiBase\Module\Plugin\BootstrapPlugin,
     KapitchiBase\Module\PluginBroker,
     RuntimeException as NoBootstrapPluginException;
