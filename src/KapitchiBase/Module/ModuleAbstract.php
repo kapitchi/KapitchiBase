@@ -2,14 +2,11 @@
 
 namespace KapitchiBase\Module;
 
-use Zend\ModuleManager\ModuleManager,
-    Zend\ModuleManager\Feature\BootstrapListenerInterface,
+use Zend\ModuleManager\Feature\BootstrapListenerInterface,
     Zend\EventManager\Event,
     Zend\Loader\Pluggable as PluggableInterface,
     ZfcBase\Module\AbstractModule as ZfcModuleAbstract,
-    KapitchiBase\Module\Plugin\BootstrapPlugin,
-    KapitchiBase\Module\PluginBroker,
-    RuntimeException as NoBootstrapPluginException;
+    KapitchiBase\Module\PluginBroker;
 
 abstract class ModuleAbstract extends ZfcModuleAbstract implements PluggableInterface, BootstrapListenerInterface {
     
