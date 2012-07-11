@@ -3,7 +3,7 @@
 namespace KapitchiBase\ModuleManager;
 
 use Zend\ModuleManager\Feature\BootstrapListenerInterface,
-    Zend\EventManager\Event,
+    Zend\EventManager\EventInterface,
     Zend\ModuleManager\Feature\AutoloaderProviderInterface,
     Zend\ModuleManager\Feature\LocatorRegisteredInterface;
 
@@ -14,7 +14,7 @@ abstract class AbstractModule
     abstract public function getDir();
     abstract public function getNamespace();
     
-    public function onBootstrap(Event $e) {
+    public function onBootstrap(EventInterface $e) {
         //$app = $e->getParam('application');
         //$mergedConfig = $e->getParam('config');
     }
