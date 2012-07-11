@@ -2,7 +2,7 @@
 
 namespace KapitchiBase\Crypt;
 
-use ZfcBase\Util\String;
+use KapitchiBase\Stdlib\StringUtils;
 
 class Hash {
     protected $algorithm = 'md5';
@@ -53,7 +53,7 @@ class Hash {
     }
     
     protected function getCryptSaltString($length) {
-        return str_replace('+', '.', substr(base64_encode(String::getRandomBytes($length)), 0, $length));
+        return str_replace('+', '.', substr(base64_encode(StringUtils::getRandomBytes($length)), 0, $length));
     }
     
     //getters/setters

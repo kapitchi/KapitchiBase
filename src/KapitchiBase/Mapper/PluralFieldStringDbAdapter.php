@@ -3,7 +3,7 @@
 namespace KapitchiBase\Mapper;
 
 use Zend\Stdlib\ArrayUtils,
-    ZfcBase\Mapper\DbAdapterMapper,
+    KapitchiBase\Mapper\DbAdapterMapper,
     KapitchiBase\Stdlib\PluralField;
 
 class PluralFieldStringDbAdapter extends DbAdapterMapper {

@@ -2,10 +2,9 @@
 
 namespace KapitchiBase\Model;
 
-use ZfcBase\Model\ModelAbstract,
-    RuntimeException as UnknownDataException;
+use RuntimeException as UnknownDataException;
 
-class TreeNodeModel extends ModelAbstract {
+class TreeNodeModel {
     private $parent;
     private $children;
     private $depth;
@@ -13,6 +12,8 @@ class TreeNodeModel extends ModelAbstract {
     private $parentSet = false;
     private $childrenSet = false;
     
+    protected $item;
+
     public function isRoot() {
         return ($this->getParent() === null);
     }
@@ -67,4 +68,13 @@ class TreeNodeModel extends ModelAbstract {
         $this->depth = $depth;
     }
     
+    public function getItem()
+    {
+        return $this->item;
+    }
+
+    public function setItem($item)
+    {
+        $this->item = $item;
+    }
 }

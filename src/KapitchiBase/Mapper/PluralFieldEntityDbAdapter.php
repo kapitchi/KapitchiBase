@@ -2,14 +2,13 @@
 
 namespace KapitchiBase\Mapper;
 
-use Zend\Stdlib\ArrayUtils,
-    ZfcBase\Mapper\DbAdapterMapper,
+use KapitchiBase\Mapper\DbAdapterMapper,
     KapitchiBase\Stdlib\PluralField;
 
 /**
- * TODO this has to be finished!!!!
+ * TODO - UNFINISHED!
  */
-class PluralFieldObjectDbAdapter extends DbAdapterMapper {
+class PluralFieldEntityDbAdapter extends DbAdapterMapper {
     protected $tableName;
     protected $objectMapper;
     

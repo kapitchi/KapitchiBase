@@ -1,10 +1,9 @@
 <?php
 namespace KapitchiBase\Stdlib;
 
-use Traversable,
-    Zend\Stdlib\Options as ZendOptions,
+use Zend\Stdlib\Options as ZendOptions,
     InvalidArgumentException as OptionNotAvaliable,
-    ZfcBase\Util\String,
+    KapitchiBase\Stdlib\StringUtils,
     Zend\Stdlib\Exception\BadMethodCallException;
 
 /**
@@ -49,11 +48,11 @@ class Options extends ZendOptions
         $type = substr($methodName, 0, 3);
         $camelOption = substr($methodName, 3);
         if ($type == 'get') {
-            $option = String::fromCamelCase($camelOption);
+            $option = StringUtils::fromCamelCase($camelOption);
             return $this->get($option);
         }
         elseif ($type == 'set') {
-            $option = String::fromCamelCase($camelOption);
+            $option = StringUtils::fromCamelCase($camelOption);
             if (count($args) != 1) {
                 throw new \InvalidArgumentException("Invalid arguments for setter");
             }
