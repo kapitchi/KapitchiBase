@@ -1,7 +1,8 @@
 [WIP] Zend Framework 2 - Kapitchi Base module
 =================================================
-Version: 0.1
-Author:  Matus Zeman
+Version: 0.1  
+Author:  Matus Zeman  
+Website: http://kapitchi.com/  
 
 Please join the following group in order to get development updates e.g. new features, changes in API ...     
 https://groups.google.com/d/forum/kapitchi-modules-updates
