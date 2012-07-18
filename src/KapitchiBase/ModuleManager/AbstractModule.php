@@ -14,9 +14,9 @@ abstract class AbstractModule
     abstract public function getDir();
     abstract public function getNamespace();
     
-    public function onBootstrap(EventInterface $e) {
-        //$app = $e->getParam('application');
-        //$mergedConfig = $e->getParam('config');
+    public function onBootstrap(EventInterface $e)
+    {
+        
     }
     
     public function getAutoloaderConfig()
