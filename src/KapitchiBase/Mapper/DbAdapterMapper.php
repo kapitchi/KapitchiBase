@@ -47,7 +47,7 @@ class DbAdapterMapper implements TransactionalInterface, AdapterAwareInterface
             return $this->tableGateways[$typeStr][$tableName];
         }
         
-        $adapter = $write ? $this->getWriteAdapter() : $this->getReadAdapter();
+        $adapter = $write ? $this->getWriteDbAdapter() : $this->getReadDbAdapter();
         $tableGateway = new TableGateway($tableName, $adapter);
         
         //keep the instance
@@ -58,17 +58,17 @@ class DbAdapterMapper implements TransactionalInterface, AdapterAwareInterface
     
     public function beginTransaction()
     {
-        $this->performTransactionOperation('beginTransaction', $this->getWriteAdapter());
+        $this->performTransactionOperation('beginTransaction', $this->getWriteDbAdapter());
     }
     
     public function commit()
     {
-        $this->performTransactionOperation('commit', $this->getWriteAdapter());
+        $this->performTransactionOperation('commit', $this->getWriteDbAdapter());
     }
     
     public function rollback()
     {
-        $this->performTransactionOperation('rollback', $this->getWriteAdapter());
+        $this->performTransactionOperation('rollback', $this->getWriteDbAdapter());
     }
     
     private function performTransactionOperation($operation, Adapter $adapter) 
