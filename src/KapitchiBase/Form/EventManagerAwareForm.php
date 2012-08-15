@@ -4,9 +4,12 @@ namespace KapitchiBase\Form;
 
 use Zend\EventManager\EventManagerAwareInterface,
     Zend\EventManager\EventManagerInterface,
-    Zend\Form\Form;
+    Zend\Form\Form,
+    KapitchiBase\ServiceManager\InitializerInitEvent;
 
-class EventManagerAwareForm extends Form implements \KapitchiBase\ServiceManager\InitializerInitEvent
+class EventManagerAwareForm
+    extends Form
+    implements EventManagerAwareInterface, InitializerInitEvent
 {
      /**
      * @var EventManagerInterface

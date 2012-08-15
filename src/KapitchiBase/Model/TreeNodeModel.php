@@ -14,41 +14,48 @@ class TreeNodeModel {
     
     protected $item;
 
-    public function isRoot() {
+    public function isRoot()
+    {
         return ($this->getParent() === null);
     }
     
-    public function isLeaf() {
+    public function isLeaf()
+    {
         return (count($this->getChildren()) == 0);
     }
     
-    public function getParent() {
+    public function getParent()
+    {
         if(!$this->parentSet) {
             throw new UnknownDataException("Parent hasn't been set");
         }
         return $this->parent;
     }
 
-    public function setParent($parent) {
+    public function setParent($parent)
+    {
         $this->parent = $parent;
         
         $this->parentSet = true;
     }
 
-    public function getChildren() {
+    public function getChildren()
+    {
         if (!$this->childrenSet) {
             throw new UnknownDataException("Children haven't been set");
         }
         return $this->children;
     }
 
-    public function setChildren($children) {
+    public function setChildren($children)
+    {
         $this->children = $children;
         
         $this->childrenSet = true;
     }
     
-    public function getDepth() {
+    public function getDepth()
+    {
         if($this->depth !== null) {
             return $this->depth;
         }
@@ -64,7 +71,8 @@ class TreeNodeModel {
         return $this->depth;
     }
     
-    public function setDepth($depth) {
+    public function setDepth($depth)
+    {
         $this->depth = $depth;
     }
     
