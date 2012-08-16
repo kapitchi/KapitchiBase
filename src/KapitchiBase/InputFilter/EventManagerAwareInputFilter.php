@@ -1,8 +1,7 @@
 <?php
 namespace KapitchiBase\InputFilter;
 
-use Zend\EventManager\EventManagerInterface,
-    Zend\EventManager\EventManager;
+use Zend\EventManager\EventManagerInterface;
 /**
  *
  * @author Matus Zeman <mz@kapitchi.com>
@@ -13,6 +12,12 @@ class EventManagerAwareInputFilter extends \Zend\InputFilter\InputFilter impleme
      * @var EventManagerInterface
      */
     protected $eventManager;
+    
+    public function isValid()
+    {
+        $this->getEventManager()->trigger('isValid.pre', $this);
+        return parent::isValid();
+    }
 
     public function setEventManager(EventManagerInterface $eventManager)
     {
