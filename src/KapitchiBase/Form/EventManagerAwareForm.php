@@ -30,13 +30,18 @@ class EventManagerAwareForm
     /**
      * Retrieve the event manager
      *
-     * Lazy-loads an EventManager instance if none registered.
-     * 
      * @return EventManagerInterface
      */
     public function getEventManager()
     {
         return $this->eventManager;
+    }
+    
+    public function prepare()
+    {
+        parent::prepare();
+        
+        $this->getEventManager()->trigger('prepare', $this);
     }
     
     protected function attachDefaultListeners() {
