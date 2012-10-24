@@ -18,6 +18,19 @@ class EventManagerAwareInputFilter extends \Zend\InputFilter\InputFilter impleme
         $this->getEventManager()->trigger('isValid.pre', $this);
         return parent::isValid();
     }
+    
+    /**
+     * Needed here as Zend InputFilter does not provide this and we use it plugins e.g. Contact/Company
+     * @author Matus Zeman
+     */
+    public function getValidationGroup()
+    {
+        if($this->validationGroup !== null) {
+            return $this->validationGroup;
+        }
+        
+        return array_keys($this->inputs);
+    }
 
     public function setEventManager(EventManagerInterface $eventManager)
     {
