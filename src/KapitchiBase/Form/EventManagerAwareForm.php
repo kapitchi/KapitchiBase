@@ -16,6 +16,22 @@ class EventManagerAwareForm
      */
     protected $eventManager;
 
+    public function setData($data)
+    {
+        parent::setData($data);
+        
+        $this->getEventManager()->trigger('setData', $this, array(
+            'data' => $data
+        ));
+    }
+    
+    public function prepare()
+    {
+        parent::prepare();
+        
+        $this->getEventManager()->trigger('prepare', $this);
+    }
+    
     public function setEventManager(EventManagerInterface $eventManager)
     {
         $eventManager->setIdentifiers(array(
@@ -35,13 +51,6 @@ class EventManagerAwareForm
     public function getEventManager()
     {
         return $this->eventManager;
-    }
-    
-    public function prepare()
-    {
-        parent::prepare();
-        
-        $this->getEventManager()->trigger('prepare', $this);
     }
     
     protected function attachDefaultListeners() {
