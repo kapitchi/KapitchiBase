@@ -15,6 +15,19 @@ class EventManagerAwareForm
      * @var EventManagerInterface
      */
     protected $eventManager;
+    
+    /**
+     * Dummy method to support tools like PoEdit. Just returns $message param
+     * 
+     * @param type $message
+     * @param type $textDomain
+     * @param type $locale
+     * @return string $message param
+     */
+    public function translate($message, $textDomain = 'default', $locale = null)
+    {
+        return $message;
+    }
 
     public function setData($data)
     {

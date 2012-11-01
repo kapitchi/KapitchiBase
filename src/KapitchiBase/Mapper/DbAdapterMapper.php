@@ -107,6 +107,10 @@ class DbAdapterMapper implements TransactionalInterface, AdapterAwareInterface
     }
     
     // getters/setters
+    /**
+     * 
+     * @return \Zend\Db\Adapter\Adapter
+     */
     public function getReadDbAdapter()
     {
         return $this->readDbAdapter;

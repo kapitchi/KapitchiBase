@@ -31,6 +31,15 @@ class EventManagerAwareInputFilter extends \Zend\InputFilter\InputFilter impleme
         
         return array_keys($this->inputs);
     }
+    
+    public function addValidationGroup($fields)
+    {
+        $fields = (array)$fields;
+        $group = $this->getValidationGroup();
+        $group = array_unique(array_merge($group, $fields));
+        $this->validateValidationGroup($group);
+        $this->setValidationGroup($group);
+    }
 
     public function setEventManager(EventManagerInterface $eventManager)
     {
