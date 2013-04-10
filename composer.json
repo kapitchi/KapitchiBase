@@ -1,5 +1,6 @@
 {
     "name": "kapitchi/base",
+    "license": "LGPL-3.0",
     "description": "Common set of classes and interfaces used across Kapitchi modules",
     "keywords": [
         "kapitchi",
