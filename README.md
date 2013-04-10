@@ -11,7 +11,8 @@ __README.md status:__ INCOMPLETE
 Licence
 =======
 
-TODO
+![LGPLv3](http://www.gnu.org/graphics/lgplv3-88x31.png)  
+[The GNU Lesser General Public License, version 3.0](LICENSE.txt)
 
 
 Introduction
