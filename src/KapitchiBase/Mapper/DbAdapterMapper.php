@@ -42,7 +42,7 @@ class DbAdapterMapper implements TransactionalInterface, AdapterAwareInterface
     /**
      * @param string $tableName
      * @param bool $write
-     * @return Zend\Db\TableGateway\TableGateway 
+     * @return \Zend\Db\TableGateway\TableGateway 
      */
     public function getTableGateway($tableName, $write = false)
     {
