@@ -8,7 +8,7 @@
 
 namespace KapitchiBase\Stdlib;
 
-class String
+class StringUtils
 {
     public static function toCamelCase($name)
     {
